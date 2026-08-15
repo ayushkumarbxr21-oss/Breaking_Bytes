@@ -20,9 +20,11 @@ SignSpeak is a web-based assistive application that translates sign language ges
 - TensorFlow.js
 - Google Teachable Machine
 
-### Live Project
+### Project Links
 
-🌐 [Open SignSpeak](https://connectingthoughts.my.canva.site/)
+🌐 [Live Project](https://connectingthoughts.my.canva.site/)
+
+📄 [View My Resume](resume.html)
 
 ### How to Run
 
