@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SignSpeak by Breaking_Bytes</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f0f2f5; }
+        #webcam-container { margin: 20px auto; border: 4px solid #333; width: 400px; border-radius: 8px; }
+        #label-container { font-size: 28px; font-weight: bold; color: #007bff; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <h1>SignSpeak: Real-Time Translator</h1>
+    <button type="button" onclick="init()">Start Camera</button>
+    <div id="webcam-container"></div>
+    <div id="label-container">Click start to begin...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <script type="text/javascript">
+        const URL = "https://teachablemachine.withgoogle.com/models/QhLRxlIQ0/"; // Put your link here!
+        let model, webcam, labelContainer, maxPredictions, lastSpoken = "";
+
+        async function init() {
+            model = await tmImage.load(URL + "model.json", URL + "metadata.json");
+            maxPredictions = model.getTotalClasses();
+            webcam = new tmImage.Webcam(400, 400, true); 
+            await webcam.setup(); await webcam.play();
+            window.requestAnimationFrame(loop);
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            labelContainer = document.getElementById("label-container");
+        }
+
+        async function loop() { webcam.update(); await predict(); window.requestAnimationFrame(loop); }
+
+        async function predict() {
+            const prediction = await model.predict(webcam.canvas);
+            let topClass = "", highestProb = 0;
+            for (let i = 0; i < maxPredictions; i++) {
+                if (prediction[i].probability > highestProb) {
+                    highestProb = prediction[i].probability;
+                    topClass = prediction[i].className;
+                }
+            }
+            labelContainer.innerHTML = topClass;
+
+            // Trigger Speech Synthesis (The "Speech" part of your PPT)
+            if (topClass !== "Neutral" && topClass !== lastSpoken && highestProb > 0.90) {
+                const utterance = new SpeechSynthesisUtterance(topClass);
+                window.speechSynthesis.speak(utterance);
+                lastSpoken = topClass;
+            } else if (topClass === "Neutral") { lastSpoken = ""; }
+        }
+    </script>
+</body>
+</html>
