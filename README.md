@@ -24,7 +24,7 @@ SignSpeak is a web-based assistive application that translates sign language ges
 
 🌐 [Live Project](https://connectingthoughts.my.canva.site/)
 
-📄 [View My Resume](https://ayushkumarbx21-oss.github.io/Breaking_Bytes/resume.html)
+📄 [View My Resume](https://ayushkumarbxr21-oss.github.io/Breaking_Bytes/resume.html)
 
 ### How to Run
 
